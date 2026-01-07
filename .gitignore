@@ -112,3 +112,6 @@ venv.bak/
 *.der
 *.pem
 *_txt.py
+
+# MicroPython byte-code
+*.mpy

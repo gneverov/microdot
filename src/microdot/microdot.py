@@ -6,6 +6,7 @@ The ``microdot`` module defines a few classes that help implement HTTP-based
 servers for MicroPython and standard Python.
 """
 import asyncio
+from freeze import frozendict
 import io
 import re
 import time
@@ -53,12 +54,12 @@ except ImportError:  # pragma: no cover
     def print_exception(exc):
         traceback.print_exc()
 
-MUTED_SOCKET_ERRORS = [
+MUTED_SOCKET_ERRORS = (
     32,  # Broken pipe
     54,  # Connection reset by peer
     104,  # Connection reset by peer
     128,  # Operation on closed socket
-]
+)
 
 
 def urldecode(s):
@@ -545,7 +546,7 @@ class Response:
                    default is "OK" for responses with a 200 status code and
                    "N/A" for any other status codes.
     """
-    types_map = {
+    types_map = frozendict({
         'css': 'text/css',
         'gif': 'image/gif',
         'html': 'text/html',
@@ -555,7 +556,7 @@ class Response:
         'png': 'image/png',
         'txt': 'text/plain',
         'svg': 'image/svg+xml',
-    }
+    })
 
     send_file_buffer_size = 1024
 
@@ -830,14 +831,14 @@ class URLPattern():
                         using the :meth:`URLPattern.register_type` method.
     """
 
-    segment_patterns = {
+    segment_patterns = frozendict({
         'string': '/([^/]+)',
         'int': '/(-?\\d+)',
         'path': '/(.+)',
-    }
-    segment_parsers = {
+    })
+    segment_parsers = frozendict({
         'int': lambda value: int(value),
-    }
+    })
 
     @classmethod
     def register_type(cls, type_name, pattern='[^/]+', parser=None):
@@ -1533,7 +1534,7 @@ class Microdot:
         return res
 
 
-Response.already_handled = Response()
+# Response.already_handled = Response()
 
 abort = Microdot.abort
 redirect = Response.redirect
